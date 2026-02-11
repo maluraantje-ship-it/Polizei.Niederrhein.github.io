@@ -1,186 +1,403 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<title>Ostdeutsche Polizei – Karriere</title>
-<style>
-html, body { margin:0; padding:0; height:100%; font-family:Arial, sans-serif; background: radial-gradient(circle at top, #1e90ff, #020b24); }
-body { display:flex; justify-content:center; align-items:flex-start; color:white; }
-.container { text-align:center; background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border-radius: 20px; padding:40px; width:600px; margin:20px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-h1 { font-size:48px; margin-bottom:30px; }
-h2 { font-size:32px; margin-bottom:20px; }
-button { font-size:22px; padding:20px 40px; margin:10px; border:none; border-radius:12px; cursor:pointer; background: linear-gradient(135deg, #1e90ff, #00c6ff); color:white; box-shadow:0 0 20px rgba(30,144,255,0.7); transition:0.3s; }
-button:hover { box-shadow:0 0 30px rgba(0,255,255,0.9); transform:scale(1.05); }
-input, textarea { width:100%; padding:12px; margin:8px 0; border-radius:10px; border:none; }
-.hidden { display:none; }
-.nav { position:fixed; top:15px; left:15px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polizei Niederrhein - Karriere und Beamtenportal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://cdn.suwalls.com/wallpapers/abstract/pink-blurry-nebula-in-the-blue-galaxy-52976-1920x1200.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7); /* Dunkler Overlay für Lesbarkeit */
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        button {
+            font-size: 1.5em;
+            padding: 15px 30px;
+            margin: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input, textarea {
+            width: 80%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1.2em;
+        }
+        .nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .nav button {
+            font-size: 1em;
+            padding: 10px;
+            margin: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+        .list-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
+    <div class="nav">
+        <button onclick="history.back()">← Zurück</button>
+        <button onclick="history.forward()">Vorwärts →</button>
+    </div>
+    <div class="container" id="main">
+        <h1>Polizei Niederrhein</h1>
+        <button onclick="showBeamtenLogin()">Beamten Anmeldung</button>
+        <button onclick="showKarriere()">Karriere</button>
+    </div>
 
-<div class="nav">
-  <button onclick="history.back()">⬅</button>
-  <button onclick="history.forward()">➡</button>
-</div>
+    <div class="container hidden" id="beamten-login">
+        <h1>Beamten Anmeldung</h1>
+        <input type="password" id="beamten-pw" placeholder="Passwort eingeben (1224)">
+        <button onclick="loginBeamten()">Anmelden</button>
+        <p id="beamten-error" style="color: red;"></p>
+        <button onclick="backToMain()">Zurück</button>
+    </div>
 
-<div class="container" id="start">
-  <h1>Ostdeutsche Polizei</h1>
-  <button onclick="showSection('beamten')">Beamten Anmeldung</button>
-  <button onclick="showSection('karriere')">Karriere</button>
-  <button onclick="showSection('aktensystem')">Aktensystem</button>
-</div>
+    <div class="container hidden" id="beamten-panel">
+        <h1>Beamten Panel</h1>
+        <div id="applications-list"></div>
+        <button onclick="showOpenClose()">Bewerbungen Öffnen/Schließen (Code 1225)</button>
+        <button onclick="showAktenLogin()">Aktensystem</button>
+        <button onclick="logoutBeamten()">Ausloggen</button>
+    </div>
 
-<div class="container hidden" id="beamten">
-  <h2>Beamten Login</h2>
-  <input id="pw" placeholder="Passwort">
-  <button onclick="loginBeamten()">Einloggen</button>
-  <div id="adminArea" class="hidden">
-    <h3>Alle Bewerbungen</h3>
-    <ul id="applications"></ul>
-    <button onclick="toggleOpen(true)">Bewerbungen Öffnen (Code 1225)</button>
-    <button onclick="toggleOpen(false)">Bewerbungen Schließen (Code 1225)</button>
-  </div>
-</div>
+    <div class="container hidden" id="open-close">
+        <h1>Bewerbungen Öffnen/Schließen</h1>
+        <input type="password" id="open-close-code" placeholder="Code eingeben (1225 - ungültig)">
+        <button onclick="toggleApplications()">Ausführen</button>
+        <p id="open-close-error" style="color: red;"></p>
+        <button onclick="backToBeamten()">Zurück</button>
+    </div>
 
-<div class="container hidden" id="karriere">
-  <h2>Karriere</h2>
-  <button onclick="showSection('bewerbung')">Bewerbung</button>
-  <button onclick="showSection('status')">Bewerbungsstatus</button>
-  <button onclick="showSection('info')">Informationen</button>
-</div>
+    <div class="container hidden" id="akten-login">
+        <h1>Aktensystem Anmeldung</h1>
+        <input type="password" id="akten-pw" placeholder="Passwort eingeben (333563)">
+        <button onclick="loginAkten()">Anmelden</button>
+        <p id="akten-error" style="color: red;"></p>
+        <button onclick="backToBeamten()">Zurück</button>
+    </div>
 
-<div class="container hidden" id="bewerbung">
-  <h2>Bewerbung – Ostdeutsche Polizei</h2>
-  <form onsubmit="submitApplication(event)">
-    <input placeholder="Name (Dein Vorname)" required>
-    <input placeholder="Alter (Dein Alter)" required>
-    <input placeholder="Discord-Tag (Name#0000)" required>
-    <input placeholder="Onlinezeiten (z.B. Werktags 18–22 Uhr)" required>
-    <input placeholder="RP-Erfahrung (Warst du schon Polizist?)" required>
-    <textarea placeholder="Anschreiben (Sehr geehrte Polizei...)" required></textarea>
-    <textarea placeholder="Lebenslauf (alle Fragen einzeln in Klammern)" required></textarea>
-    <button type="submit">Abschicken</button>
-  </form>
-  <p id="codeOutput"></p>
-</div>
+    <div class="container hidden" id="akten-panel">
+        <h1>Aktensystem</h1>
+        <input type="text" id="akten-name" placeholder="Aktenname">
+        <textarea id="akten-content" placeholder="Inhalt"></textarea>
+        <button onclick="addAkten()">Akten hinzufügen</button>
+        <div id="akten-list"></div>
+        <div id="logs-list">
+            <h2>Logs</h2>
+        </div>
+        <button onclick="logoutAkten()">Zurück</button>
+    </div>
 
-<div class="container hidden" id="status">
-  <h2>Bewerbungsstatus</h2>
-  <input id="statusCode" placeholder="Dein Bewerbungs-Code">
-  <button onclick="checkStatus()">Status prüfen</button>
-  <p id="statusResult"></p>
-</div>
+    <div class="container hidden" id="karriere">
+        <h1>Karriere</h1>
+        <button id="bewerbung-btn" onclick="showBewerbung()">Bewerbung</button>
+        <button onclick="showBewerbungsstatus()">Bewerbungsstatus</button>
+        <button onclick="showInformationen()">Informationen</button>
+        <button onclick="backToMain()">Zurück</button>
+    </div>
 
-<div class="container hidden" id="info">
-  <h2>Informationen</h2>
-  <p>Gib deinen Bewerbungs-Code ein, um den Status deiner Bewerbung zu prüfen.</p>
-</div>
+    <div class="container hidden" id="bewerbung">
+        <h1>Bewerbung für Polizei Niederrhein</h1>
+        <form id="bewerbung-form">
+            <input type="text" id="name" placeholder="Name: [Dein Vorname]" required>
+            <input type="number" id="alter" placeholder="Alter: [Dein Alter]" required>
+            <input type="text" id="discord" placeholder="Discord-Tag: [Name#0000]" required>
+            <input type="text" id="onlinezeiten" placeholder="Onlinezeiten: [z.B. Werktags 18–22 Uhr, Wochenende flexibel]" required>
+            <input type="text" id="rp" placeholder="RP-Erfahrung: [Kurze Info, ob du bereits auf anderen Servern Polizist warst]" required>
+            <textarea id="anschreiben" placeholder="Anschreiben: [Sehr geehrte Polizei...]" required></textarea>
+            <textarea id="lebenslauf" placeholder="Lebenslauf: [Dein Lebenslauf]" required></textarea>
+            <button type="button" onclick="submitBewerbung()">Abschicken</button>
+        </form>
+        <p id="bewerbung-code" style="font-size: 1.5em; color: yellow;"></p>
+        <button onclick="backToKarriere()">Zurück</button>
+    </div>
 
-<div class="container hidden" id="aktensystem">
-  <h2>Aktensystem</h2>
-  <input id="aktenPw" placeholder="Passwort">
-  <button onclick="loginAktensystem()">Einloggen</button>
-  <div id="aktenArea" class="hidden">
-    <h3>Alle Einträge</h3>
-    <ul id="aktenList"></ul>
-    <textarea id="newEntry" placeholder="Neuen Eintrag hinzufügen..."></textarea>
-    <button onclick="addEntry()">Hinzufügen</button>
-  </div>
-</div>
+    <div class="container hidden" id="bewerbungsstatus">
+        <h1>Bewerbungsstatus</h1>
+        <p id="applications-open-status"></p>
+        <button onclick="backToKarriere()">Zurück</button>
+    </div>
 
-<script>
-let apps = [];
-let open = true;
-let aktensystem = [];
+    <div class="container hidden" id="informationen">
+        <h1>Informationen</h1>
+        <input type="text" id="info-code" placeholder="Deinen Code eingeben">
+        <button onclick="checkStatus()">Status prüfen</button>
+        <p id="status-result" style="font-size: 1.5em;"></p>
+        <button onclick="backToKarriere()">Zurück</button>
+    </div>
 
-function showSection(id){
-  ['karriere','bewerbung','status','info','beamten','aktensystem'].forEach(c=>document.getElementById(c).classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-}
+    <script>
+        // Daten in localStorage initialisieren
+        if (!localStorage.getItem('applications')) {
+            localStorage.setItem('applications', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('applicationsOpen')) {
+            localStorage.setItem('applicationsOpen', 'true');
+        }
+        if (!localStorage.getItem('akten')) {
+            localStorage.setItem('akten', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('logs')) {
+            localStorage.setItem('logs', JSON.stringify([]));
+        }
 
-// Bewerbungen
-function submitApplication(e){
-  e.preventDefault();
-  if(!open){ alert('Bewerbungen sind geschlossen!'); return; }
-  const code = Math.random().toString(36).substring(2,8).toUpperCase();
-  apps.push({code:code, status:'In Arbeit'});
-  document.getElementById('codeOutput').innerText = 'Dein Bewerbungs-Code: ' + code;
-}
+        function showSection(id) {
+            document.querySelectorAll('.container').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
 
-function checkStatus(){
-  const c = document.getElementById('statusCode').value;
-  const app = apps.find(a=>a.code===c);
-  document.getElementById('statusResult').innerText = app ? 'Status: ' + app.status : 'Code nicht gefunden';
-}
+        function backToMain() {
+            showSection('main');
+        }
 
-function loginBeamten(){
-  const pw = document.getElementById('pw').value;
-  if(pw==='1224'){
-    document.getElementById('adminArea').classList.remove('hidden');
-    updateList();
-    alert('Beamtenbereich geöffnet!');
-  } else { alert('Falsches Passwort'); }
-}
+        function showBeamtenLogin() {
+            showSection('beamten-login');
+        }
 
-function updateList(){
-  const ul = document.getElementById('applications');
-  ul.innerHTML='';
-  apps.forEach(a=>{
-    const li = document.createElement('li');
-    li.innerHTML = a.code + ' - ' + a.status +
-      ' <button onclick="setStatus(\''+a.code+'\','\'Angenommen\')">Annehmen</button>' +
-      ' <button onclick="setStatus(\''+a.code+'\','\'Abgelehnt\')">Ablehnen</button>';
-    ul.appendChild(li);
-  });
-}
+        function loginBeamten() {
+            const pw = document.getElementById('beamten-pw').value;
+            if (pw === '1224') {
+                showSection('beamten-panel');
+                loadApplications();
+            } else {
+                document.getElementById('beamten-error').textContent = 'Falsches Passwort!';
+            }
+        }
 
-function setStatus(code,status){
-  const app = apps.find(a=>a.code===code);
-  if(app){ app.status=status; updateList(); }
-}
+        function logoutBeamten() {
+            backToMain();
+        }
 
-function toggleOpen(val){
-  const pw = prompt('Code eingeben (nur 1225 gültig)');
-  if(pw==='1225'){ open=val; alert(val?'Bewerbungen geöffnet':'Bewerbungen geschlossen'); }
-  else { alert('Ungültiger Code!'); }
-}
+        function backToBeamten() {
+            showSection('beamten-panel');
+        }
 
-// Aktensystem
-function loginAktensystem(){
-  const pw = document.getElementById('aktenPw').value;
-  if(pw==='333563'){
-    document.getElementById('aktenArea').classList.remove('hidden');
-    updateAktenList();
-    alert('Aktensystem geöffnet!');
-  } else { alert('Falsches Passwort'); }
-}
+        function showOpenClose() {
+            showSection('open-close');
+        }
 
-function updateAktenList(){
-  const ul = document.getElementById('aktenList');
-  ul.innerHTML='';
-  aktensystem.forEach((e,i)=>{
-    const li = document.createElement('li');
-    li.innerHTML = e + ' <button onclick="deleteEntry('+i+')">Löschen</button>';
-    ul.appendChild(li);
-  });
-}
+        function toggleApplications() {
+            const code = document.getElementById('open-close-code').value;
+            if (code === '1225') {
+                document.getElementById('open-close-error').textContent = 'Code ist ungültig! (Wie gewünscht)';
+            } else {
+                document.getElementById('open-close-error').textContent = 'Falscher Code!';
+            }
+            // Hier könntest du den Code ändern, um es funktional zu machen: 
+            // const isOpen = localStorage.getItem('applicationsOpen') === 'true';
+            // localStorage.setItem('applicationsOpen', (!isOpen).toString());
+        }
 
-function addEntry(){
-  const val = document.getElementById('newEntry').value.trim();
-  if(val===''){ alert('Eintrag leer!'); return; }
-  aktensystem.push(val);
-  console.log('Neuer Eintrag hinzugefügt:', val);
-  document.getElementById('newEntry').value='';
-  updateAktenList();
-}
+        function showAktenLogin() {
+            showSection('akten-login');
+        }
 
-function deleteEntry(i){
-  console.log('Eintrag gelöscht:', aktensystem[i]);
-  aktensystem.splice(i,1);
-  updateAktenList();
-}
+        function loginAkten() {
+            const pw = document.getElementById('akten-pw').value;
+            if (pw === '333563') {
+                showSection('akten-panel');
+                loadAkten();
+                loadLogs();
+            } else {
+                document.getElementById('akten-error').textContent = 'Falsches Passwort!';
+            }
+        }
 
-</script>
+        function logoutAkten() {
+            backToBeamten();
+        }
 
+        function addAkten() {
+            const name = document.getElementById('akten-name').value;
+            const content = document.getElementById('akten-content').value;
+            if (name && content) {
+                const akten = JSON.parse(localStorage.getItem('akten'));
+                akten.push({ name, content });
+                localStorage.setItem('akten', JSON.stringify(akten));
+                logAction(`Akten '${name}' hinzugefügt`);
+                loadAkten();
+            }
+        }
+
+        function deleteAkten(index) {
+            const akten = JSON.parse(localStorage.getItem('akten'));
+            const deletedName = akten[index].name;
+            akten.splice(index, 1);
+            localStorage.setItem('akten', JSON.stringify(akten));
+            logAction(`Akten '${deletedName}' gelöscht`);
+            loadAkten();
+        }
+
+        function loadAkten() {
+            const list = document.getElementById('akten-list');
+            list.innerHTML = '<h2>Akten</h2>';
+            const akten = JSON.parse(localStorage.getItem('akten'));
+            akten.forEach((akt, index) => {
+                const div = document.createElement('div');
+                div.classList.add('list-item');
+                div.innerHTML = `<strong>${akt.name}</strong><p>${akt.content}</p><button onclick="deleteAkten(${index})">Löschen</button>`;
+                list.appendChild(div);
+            });
+        }
+
+        function logAction(action) {
+            const logs = JSON.parse(localStorage.getItem('logs'));
+            const date = new Date().toLocaleString();
+            logs.push({ date, action });
+            localStorage.setItem('logs', JSON.stringify(logs));
+        }
+
+        function loadLogs() {
+            const list = document.getElementById('logs-list');
+            list.innerHTML = '<h2>Logs</h2>';
+            const logs = JSON.parse(localStorage.getItem('logs'));
+            logs.forEach(log => {
+                const p = document.createElement('p');
+                p.textContent = `${log.date}: ${log.action}`;
+                list.appendChild(p);
+            });
+        }
+
+        function showKarriere() {
+            showSection('karriere');
+            updateBewerbungButton();
+        }
+
+        function backToKarriere() {
+            showSection('karriere');
+        }
+
+        function showBewerbung() {
+            if (localStorage.getItem('applicationsOpen') === 'true') {
+                showSection('bewerbung');
+            } else {
+                alert('Bewerbungen sind derzeit geschlossen!');
+            }
+        }
+
+        function submitBewerbung() {
+            const data = {
+                id: Math.floor(Math.random() * 1000000), // Zufälliger Code
+                name: document.getElementById('name').value,
+                alter: document.getElementById('alter').value,
+                discord: document.getElementById('discord').value,
+                onlinezeiten: document.getElementById('onlinezeiten').value,
+                rp: document.getElementById('rp').value,
+                anschreiben: document.getElementById('anschreiben').value,
+                lebenslauf: document.getElementById('lebenslauf').value,
+                status: 'In Arbeit'
+            };
+            const apps = JSON.parse(localStorage.getItem('applications'));
+            apps.push(data);
+            localStorage.setItem('applications', JSON.stringify(apps));
+            document.getElementById('bewerbung-code').textContent = `Dein Code: ${data.id} (Merke dir das!)`;
+            document.getElementById('bewerbung-form').reset();
+        }
+
+        function showBewerbungsstatus() {
+            showSection('bewerbungsstatus');
+            const status = localStorage.getItem('applicationsOpen') === 'true' ? 'Offen' : 'Geschlossen';
+            document.getElementById('applications-open-status').textContent = `Bewerbungen sind: ${status}`;
+        }
+
+        function showInformationen() {
+            showSection('informationen');
+        }
+
+        function checkStatus() {
+            const code = parseInt(document.getElementById('info-code').value);
+            const apps = JSON.parse(localStorage.getItem('applications'));
+            const app = apps.find(a => a.id === code);
+            if (app) {
+                document.getElementById('status-result').textContent = `Status: ${app.status}`;
+            } else {
+                document.getElementById('status-result').textContent = 'Ungültiger Code!';
+            }
+        }
+
+        function loadApplications() {
+            const list = document.getElementById('applications-list');
+            list.innerHTML = '<h2>Bewerbungen</h2>';
+            const apps = JSON.parse(localStorage.getItem('applications'));
+            apps.forEach((app, index) => {
+                const div = document.createElement('div');
+                div.classList.add('list-item');
+                div.innerHTML = `
+                    <p>Code: ${app.id}</p>
+                    <p>Name: ${app.name}, Alter: ${app.alter}, Discord: ${app.discord}</p>
+                    <p>Onlinezeiten: ${app.onlinezeiten}</p>
+                    <p>RP-Erfahrung: ${app.rp}</p>
+                    <p>Anschreiben: ${app.anschreiben}</p>
+                    <p>Lebenslauf: ${app.lebenslauf}</p>
+                    <p>Status: ${app.status}</p>
+                    <button onclick="changeStatus(${index}, 'Angenommen')">Annehmen</button>
+                    <button onclick="changeStatus(${index}, 'Abgelehnt')">Ablehnen</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function changeStatus(index, newStatus) {
+            const apps = JSON.parse(localStorage.getItem('applications'));
+            apps[index].status = newStatus;
+            localStorage.setItem('applications', JSON.stringify(apps));
+            loadApplications();
+        }
+
+        function updateBewerbungButton() {
+            const btn = document.getElementById('bewerbung-btn');
+            btn.disabled = localStorage.getItem('applicationsOpen') !== 'true';
+        }
+
+        // Initiale Prüfung
+        updateBewerbungButton();
+    </script>
 </body>
 </html>
