@@ -18,7 +18,7 @@
         * { margin:0; padding:0; box-sizing:border-box; }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             background: linear-gradient(to bottom, #0a1f4a, #001133),
                         url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&q=80&w=2000') center/cover no-repeat fixed;
             background-blend-mode: overlay;
@@ -37,7 +37,7 @@
             padding:0.8rem 1.5rem; border-radius:999px; font-size:1.05rem;
             cursor:pointer; transition:all 0.3s ease;
         }
-        .nav button:hover { background:rgba(255,255,255,0.25); transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,0.4); }
+        .nav button:hover { background:rgba(255,255,255,0.25); transform:translateY(-3px); }
 
         .container {
             background:var(--bg-overlay); backdrop-filter:blur(14px);
@@ -47,49 +47,45 @@
         }
 
         h1 {
-            font-size:3.4rem; font-weight:700; margin-bottom:2.2rem;
+            font-size:3.2rem; font-weight:700; margin-bottom:2rem;
             background:linear-gradient(90deg, #a0c4ff, #e0eaff);
             -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-            text-shadow:0 3px 12px rgba(0,80,200,0.45); text-align:center;
+            text-align:center;
         }
 
         .main-btn {
-            font-size:1.45rem; font-weight:600; padding:1.15rem 3rem; margin:1.1rem 1rem;
+            font-size:1.4rem; font-weight:600; padding:1.1rem 2.8rem; margin:1rem;
             background:linear-gradient(145deg, var(--primary), var(--primary-dark));
             color:white; border:none; border-radius:999px; cursor:pointer;
-            transition:all 0.4s cubic-bezier(0.22,1,0.36,1);
-            box-shadow:0 10px 30px rgba(0,80,200,0.4);
+            transition:all 0.35s ease; box-shadow:0 8px 25px rgba(0,80,200,0.35);
         }
-        .main-btn:hover { transform:translateY(-7px); box-shadow:0 20px 45px rgba(0,80,200,0.6), 0 0 35px var(--glow); }
+        .main-btn:hover { transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,80,200,0.55); }
 
-        .main-btn:disabled { background:linear-gradient(145deg,#555,#444)!important; transform:none!important; box-shadow:none!important; opacity:0.65; cursor:not-allowed; }
+        .main-btn:disabled { background:#444 !important; transform:none !important; opacity:0.6; cursor:not-allowed; }
 
-        .secondary-btn { background:linear-gradient(145deg,#555,#333); font-size:1.3rem; padding:1rem 2.5rem; }
+        .secondary-btn { background:linear-gradient(145deg,#555,#333); }
 
         input, textarea {
-            width:100%; max-width:700px; margin:1rem auto; padding:1.1rem 1.5rem;
-            font-size:1.2rem; border:1px solid rgba(255,255,255,0.22); border-radius:1.2rem;
-            background:rgba(255,255,255,0.09); color:white; transition:all 0.3s ease; display:block;
+            width:100%; max-width:680px; margin:0.9rem auto; padding:1rem 1.4rem;
+            font-size:1.15rem; border:1px solid rgba(255,255,255,0.2); border-radius:1rem;
+            background:rgba(255,255,255,0.08); color:white; transition:all 0.3s;
         }
-        input:focus, textarea:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 5px rgba(0,102,255,0.3); background:rgba(255,255,255,0.14); }
-
-        textarea { min-height:160px; resize:vertical; }
+        input:focus, textarea:focus { border-color:var(--primary); box-shadow:0 0 0 4px rgba(0,102,255,0.25); background:rgba(255,255,255,0.12); }
 
         .list-item {
-            background:rgba(255,255,255,0.09); border-radius:1.2rem; padding:1.6rem;
-            margin:1.4rem 0; border:1px solid rgba(255,255,255,0.12); text-align:left;
+            background:rgba(255,255,255,0.08); border-radius:1rem; padding:1.4rem; margin:1.2rem 0;
+            border:1px solid rgba(255,255,255,0.1);
         }
 
-        #search-akten { font-size:1.3rem; margin:1rem auto 1.5rem; max-width:600px; }
+        .top-controls { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem; }
 
-        .error { color:var(--error); font-size:1.3rem; margin:1rem 0; }
+        .error { color:var(--error); font-size:1.25rem; margin:1rem 0; }
 
         .hidden { display:none !important; }
 
         @media (max-width:680px) {
-            h1 { font-size:2.6rem; }
-            .main-btn { padding:1rem 2.4rem; font-size:1.3rem; margin:0.8rem 0.6rem; }
-            .container { padding:2rem 1.6rem; }
+            h1 { font-size:2.5rem; }
+            .main-btn { padding:1rem 2.2rem; font-size:1.25rem; }
         }
     </style>
 </head>
@@ -106,6 +102,7 @@
         <button class="main-btn" onclick="showKarriere()">Karriere</button>
     </div>
 
+    <!-- Beamten Login -->
     <div class="container hidden" id="beamten-login">
         <h1>Beamten Anmeldung</h1>
         <input type="password" id="beamten-pw" placeholder="Passwort eingeben">
@@ -114,21 +111,36 @@
         <button class="main-btn secondary-btn" onclick="backToMain()">Zurück</button>
     </div>
 
+    <!-- Beamten Hauptpanel -->
     <div class="container hidden" id="beamten-panel">
         <h1>Beamten Panel</h1>
-        <div id="applications-list"></div>
-        <button class="main-btn" onclick="showOpenClose()">Bewerbungen verwalten</button>
+        <button class="main-btn" onclick="showApplicationsManage()">Bewerbungen verwalten</button>
         <button class="main-btn" onclick="showAktenLogin()">Aktensystem</button>
         <button class="main-btn secondary-btn" onclick="logoutBeamten()">Ausloggen</button>
     </div>
 
-    <div class="container hidden" id="open-close">
+    <!-- Bewerbungen verwalten (mit Code-Abfrage + Öffnen/Schließen) -->
+    <div class="container hidden" id="applications-manage">
         <h1>Bewerbungen verwalten</h1>
-        <input type="password" id="open-close-code" placeholder="Code eingeben">
-        <button class="main-btn" onclick="toggleApplications()">Ausführen</button>
-        <p id="open-close-error" class="error"></p>
-        <button class="main-btn secondary-btn" onclick="backToBeamten()">Zurück</button>
+
+        <div class="top-controls">
+            <div>
+                <button class="main-btn" onclick="toggleApplicationsOpen(true)" id="btn-open" ${localStorage.getItem('applicationsOpen')==='true'?'disabled':''}>Bewerbungen öffnen</button>
+                <button class="main-btn" onclick="toggleApplicationsOpen(false)" id="btn-close" ${localStorage.getItem('applicationsOpen')!=='true'?'disabled':''}>Bewerbungen schließen</button>
+            </div>
+            <button class="main-btn secondary-btn" onclick="backToBeamten()">Zurück zum Panel</button>
+        </div>
+
+        <div id="manage-code-section" ${localStorage.getItem('manageCodeEntered')==='true'?'class=hidden':''}>
+            <input type="password" id="manage-code" placeholder="Code eingeben (12299)">
+            <button class="main-btn" onclick="checkManageCode()">Zugriff freischalten</button>
+            <p id="manage-error" class="error"></p>
+        </div>
+
+        <div id="applications-list" class="${localStorage.getItem('manageCodeEntered')==='true'?'':'hidden'}"></div>
     </div>
+
+    <!-- Aktensystem, Karriere, Bewerbung, Status, Informationen bleiben gleich wie vorher -->
 
     <div class="container hidden" id="akten-login">
         <h1>Aktensystem Anmeldung</h1>
@@ -154,6 +166,7 @@
         <button id="bewerbung-btn" class="main-btn" onclick="showBewerbung()">Bewerbung</button>
         <button class="main-btn" onclick="showBewerbungsstatus()">Bewerbungsstatus</button>
         <button class="main-btn" onclick="showInformationen()">Informationen</button>
+        <button class="main-btn" onclick="showMundliche()">Mündliche Bewerbung</button>
         <button class="main-btn secondary-btn" onclick="backToMain()">Zurück</button>
     </div>
 
@@ -173,6 +186,17 @@
         <button class="main-btn secondary-btn" onclick="backToKarriere()">Zurück</button>
     </div>
 
+    <div class="container hidden" id="mundliche">
+        <h1>Mündliche Bewerbung</h1>
+        <p style="font-size:1.3rem; margin:2rem 0;">
+            Für eine mündliche Bewerbung kontaktiere bitte einen Beamten im Discord.<br>
+            Bereite dich auf Fragen zu Motivation, RP-Erfahrung und Verfügbarkeit vor.
+        </p>
+        <button class="main-btn secondary-btn" onclick="backToKarriere()">Zurück</button>
+    </div>
+
+    <!-- Restliche Sections (bewerbungsstatus, informationen) wie zuvor -->
+
     <div class="container hidden" id="bewerbungsstatus">
         <h1>Bewerbungsstatus</h1>
         <p id="applications-open-status" style="font-size:1.7rem; margin:2rem 0;"></p>
@@ -181,21 +205,19 @@
 
     <div class="container hidden" id="informationen">
         <h1>Informationen</h1>
-        <input type="text" id="info-code" placeholder="Code eingeben (persönlicher Code oder 12299 für alle Bewerbungen)">
-        <button class="main-btn" onclick="checkStatus()">Prüfen / Anzeigen</button>
-        <p id="status-result" style="margin-top:1.5rem; white-space:pre-wrap;"></p>
-        <div id="all-applications-view" class="hidden" style="margin-top:2rem;"></div>
+        <input type="text" id="info-code" placeholder="Deinen persönlichen Code eingeben">
+        <button class="main-btn" onclick="checkStatus()">Status prüfen</button>
+        <p id="status-result"></p>
         <button class="main-btn secondary-btn" onclick="backToKarriere()">Zurück</button>
     </div>
 
     <script>
         // KONFIGURATION
-        const BEAMTEN_PW       = '1224';
-        const OPEN_CLOSE_PW    = '1225';     // ungültig
-        const AKTEN_PW         = '333563';
-        const VIEW_ALL_CODE    = '12299';    // Code um alle Bewerbungen zu sehen
+        const BEAMTEN_PW    = '1224';
+        const MANAGE_CODE   = '12299';   // Code für Bewerbungen ansehen + bearbeiten
+        const AKTEN_PW      = '333563';
 
-        // localStorage Initialisierung
+        // localStorage Init
         if (!localStorage.getItem('applications')) localStorage.setItem('applications', JSON.stringify([]));
         if (!localStorage.getItem('applicationsOpen')) localStorage.setItem('applicationsOpen', 'true');
         if (!localStorage.getItem('akten')) localStorage.setItem('akten', JSON.stringify([]));
@@ -216,26 +238,96 @@
         function loginBeamten() {
             if (document.getElementById('beamten-pw').value === BEAMTEN_PW) {
                 showSection('beamten-panel');
-                loadApplications();
             } else {
                 document.getElementById('beamten-error').textContent = 'Falsches Passwort!';
             }
         }
         function logoutBeamten() { backToMain(); }
 
-        function showOpenClose() { showSection('open-close'); }
-        function toggleApplications() {
-            const code = document.getElementById('open-close-code').value;
-            document.getElementById('open-close-error').textContent = 
-                code === OPEN_CLOSE_PW ? 'Code derzeit nicht freigeschaltet.' : 'Ungültiger Code.';
+        function showApplicationsManage() {
+            showSection('applications-manage');
+            // Code muss neu eingegeben werden, wenn man den Bereich verlässt
+            localStorage.removeItem('manageCodeEntered');
+            document.getElementById('manage-code-section').classList.remove('hidden');
+            document.getElementById('applications-list').classList.add('hidden');
+            document.getElementById('manage-code').value = '';
+            document.getElementById('manage-error').textContent = '';
         }
+
+        function checkManageCode() {
+            const code = document.getElementById('manage-code').value.trim();
+            if (code === MANAGE_CODE) {
+                localStorage.setItem('manageCodeEntered', 'true');
+                document.getElementById('manage-code-section').classList.add('hidden');
+                document.getElementById('applications-list').classList.remove('hidden');
+                loadApplicationsManage();
+            } else {
+                document.getElementById('manage-error').textContent = 'Falscher Code!';
+            }
+        }
+
+        function toggleApplicationsOpen(open) {
+            localStorage.setItem('applicationsOpen', open ? 'true' : 'false');
+            document.getElementById('btn-open').disabled = open;
+            document.getElementById('btn-close').disabled = !open;
+            updateBewerbungButton(); // falls Karriere offen ist
+        }
+
+        function loadApplicationsManage() {
+            const list = document.getElementById('applications-list');
+            list.innerHTML = '';
+            const apps = JSON.parse(localStorage.getItem('applications')) || [];
+
+            if (apps.length === 0) {
+                list.innerHTML = '<p style="font-size:1.4rem; color:#aaa; text-align:center; padding:2rem;">Keine Bewerbungen vorhanden.</p>';
+                return;
+            }
+
+            apps.forEach((app, i) => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.innerHTML = `
+                    <p><strong>Code:</strong> ${app.id}</p>
+                    <p><strong>Name:</strong> ${app.name} (${app.alter})</p>
+                    <p><strong>Discord:</strong> ${app.discord}</p>
+                    <p><strong>Zeiten:</strong> ${app.onlinezeiten}</p>
+                    <p><strong>RP:</strong> ${app.rp}</p>
+                    <p><strong>Status:</strong> <span style="font-weight:bold">${app.status}</span></p>
+                    <div style="margin-top:1.2rem;">
+                        <button class="main-btn" style="padding:0.8rem 1.5rem; font-size:1.1rem;" onclick="changeStatus(${i}, 'Angenommen')">Annehmen</button>
+                        <button class="main-btn" style="padding:0.8rem 1.5rem; font-size:1.1rem; background:linear-gradient(145deg,#dc3545,#a71d2a);" onclick="changeStatus(${i}, 'Abgelehnt')">Ablehnen</button>
+                        <button class="main-btn" style="padding:0.8rem 1.5rem; font-size:1.1rem; background:linear-gradient(145deg,#6c757d,#495057);" onclick="deleteApplication(${i})">Löschen</button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function changeStatus(index, newStatus) {
+            const apps = JSON.parse(localStorage.getItem('applications'));
+            apps[index].status = newStatus;
+            localStorage.setItem('applications', JSON.stringify(apps));
+            loadApplicationsManage();
+        }
+
+        function deleteApplication(index) {
+            if (!confirm('Bewerbung wirklich endgültig löschen?')) return;
+            const apps = JSON.parse(localStorage.getItem('applications'));
+            apps.splice(index, 1);
+            localStorage.setItem('applications', JSON.stringify(apps));
+            loadApplicationsManage();
+        }
+
+        // ────────────────────────────────────────────────
+        // Akten-System (wie zuvor – mit Suche)
+        // ────────────────────────────────────────────────
 
         function showAktenLogin() { showSection('akten-login'); }
         function loginAkten() {
             if (document.getElementById('akten-pw').value === AKTEN_PW) {
                 showSection('akten-panel');
                 allAkten = JSON.parse(localStorage.getItem('akten')) || [];
-                loadAkten();           // alle laden
+                loadAkten();
                 loadLogs();
             } else {
                 document.getElementById('akten-error').textContent = 'Falsches Passwort!';
@@ -246,12 +338,10 @@
         function addAkten() {
             const name = document.getElementById('akten-name').value.trim();
             const content = document.getElementById('akten-content').value.trim();
-            if (!name || !content) return alert('Name und Inhalt dürfen nicht leer sein.');
-
+            if (!name || !content) return alert('Name und Inhalt ausfüllen.');
             allAkten.push({ name, content });
             localStorage.setItem('akten', JSON.stringify(allAkten));
             logAction(`Akten '${name}' hinzugefügt`);
-
             document.getElementById('akten-name').value = '';
             document.getElementById('akten-content').value = '';
             document.getElementById('search-akten').value = '';
@@ -274,26 +364,21 @@
         function loadAkten(filter = '') {
             const list = document.getElementById('akten-list');
             list.innerHTML = '<h2 style="margin:2rem 0 1rem;">Aktuelle Akten</h2>';
-
-            const filtered = allAkten.filter(akt => 
-                akt.name.toLowerCase().includes(filter) || 
-                akt.content.toLowerCase().includes(filter)
+            const filtered = allAkten.filter(a => 
+                a.name.toLowerCase().includes(filter) || a.content.toLowerCase().includes(filter)
             );
-
-            if (filtered.length === 0 && filter !== '') {
+            if (filtered.length === 0 && filter) {
                 list.innerHTML += '<p style="color:#aaa; padding:1rem;">Keine passenden Akten gefunden.</p>';
                 return;
             }
-
-            filtered.forEach(akt => {
-                const realIndex = allAkten.indexOf(akt);
+            filtered.forEach((akt, idx) => {
+                const realIdx = allAkten.indexOf(akt);
                 const div = document.createElement('div');
                 div.className = 'list-item';
                 div.innerHTML = `
                     <strong style="font-size:1.3rem;">${akt.name}</strong>
                     <p style="white-space:pre-wrap; margin:0.8rem 0;">${akt.content}</p>
-                    <button class="main-btn" style="font-size:1.1rem; padding:0.8rem 1.6rem; margin-top:0.8rem;" 
-                            onclick="deleteAkten(${realIndex})">Löschen</button>
+                    <button class="main-btn" style="font-size:1.1rem; padding:0.8rem 1.6rem; margin-top:0.8rem;" onclick="deleteAkten(${realIdx})">Löschen</button>
                 `;
                 list.appendChild(div);
             });
@@ -317,6 +402,10 @@
             });
         }
 
+        // ────────────────────────────────────────────────
+        // Karriere & Bewerbung (unverändert, außer mündlich hinzugefügt)
+        // ────────────────────────────────────────────────
+
         function showKarriere() { showSection('karriere'); updateBewerbungButton(); }
 
         function showBewerbung() {
@@ -325,6 +414,10 @@
             } else {
                 alert('Bewerbungen sind derzeit geschlossen.');
             }
+        }
+
+        function showMundliche() {
+            showSection('mundliche');
         }
 
         function submitBewerbung() {
@@ -347,7 +440,7 @@
             localStorage.setItem('applications', JSON.stringify(apps));
 
             document.getElementById('bewerbung-code').innerHTML = 
-                `Bewerbung erfolgreich eingereicht!<br><strong>Dein Code: ${data.id}</strong><br>Merke ihn dir gut.`;
+                `Bewerbung erfolgreich!<br><strong>Dein Code: ${data.id}</strong><br>Merke ihn dir gut.`;
             document.getElementById('bewerbung-form').reset();
         }
 
@@ -358,90 +451,18 @@
                 `Bewerbungen sind aktuell: ${isOpen ? 'OFFEN' : 'GESCHLOSSEN'}`;
         }
 
-        function showInformationen() { 
-            showSection('informationen'); 
-            document.getElementById('status-result').textContent = '';
-            document.getElementById('all-applications-view').classList.add('hidden');
-            document.getElementById('all-applications-view').innerHTML = '';
-        }
+        function showInformationen() { showSection('informationen'); }
 
         function checkStatus() {
-            const input = document.getElementById('info-code').value.trim();
-            const code = parseInt(input);
-            const resultEl = document.getElementById('status-result');
-            const viewEl = document.getElementById('all-applications-view');
-
-            resultEl.textContent = '';
-            viewEl.classList.add('hidden');
-            viewEl.innerHTML = '';
-
-            if (input === VIEW_ALL_CODE) {
-                // Alle Bewerbungen anzeigen (Code 12299)
-                const apps = JSON.parse(localStorage.getItem('applications')) || [];
-                if (apps.length === 0) {
-                    resultEl.textContent = 'Aktuell gibt es keine Bewerbungen.';
-                    return;
-                }
-
-                resultEl.textContent = `Alle Bewerbungen (${apps.length}):`;
-                viewEl.innerHTML = '<h3 style="margin:1.5rem 0 1rem; color:#aaff77;">Übersicht aller Bewerbungen</h3>';
-
-                apps.forEach(app => {
-                    const div = document.createElement('div');
-                    div.className = 'list-item';
-                    div.innerHTML = `
-                        <p><strong>Code:</strong> ${app.id}</p>
-                        <p><strong>Name / Alter:</strong> ${app.name}, ${app.alter}</p>
-                        <p><strong>Discord:</strong> ${app.discord}</p>
-                        <p><strong>Onlinezeiten:</strong> ${app.onlinezeiten}</p>
-                        <p><strong>RP-Erfahrung:</strong> ${app.rp}</p>
-                        <p><strong>Status:</strong> ${app.status}</p>
-                        <hr style="border-color:rgba(255,255,255,0.15); margin:1rem 0;">
-                    `;
-                    viewEl.appendChild(div);
-                });
-
-                viewEl.classList.remove('hidden');
-            } 
-            else if (!isNaN(code) && code > 99999) {
-                // Persönlicher Bewerbungscode
-                const app = JSON.parse(localStorage.getItem('applications')).find(a => a.id === code);
-                resultEl.textContent = app 
-                    ? `Dein Bewerbungsstatus: ${app.status}`
-                    : 'Kein Eintrag zu diesem Code gefunden.';
-            } 
-            else {
-                resultEl.textContent = 'Ungültiger Code.\nPersönlicher Code = dein 6-stelliger Bewerbungscode\n12299 = alle Bewerbungen anzeigen';
+            const code = parseInt(document.getElementById('info-code').value);
+            if (!code) {
+                document.getElementById('status-result').textContent = 'Bitte einen gültigen Code eingeben.';
+                return;
             }
-        }
-
-        function loadApplications() {
-            const list = document.getElementById('applications-list');
-            list.innerHTML = '<h2 style="margin-bottom:1.5rem;">Eingegangene Bewerbungen</h2>';
-            JSON.parse(localStorage.getItem('applications') || '[]').forEach((app, i) => {
-                const div = document.createElement('div');
-                div.className = 'list-item';
-                div.innerHTML = `
-                    <p><strong>Code:</strong> ${app.id}</p>
-                    <p><strong>Name / Alter:</strong> ${app.name}, ${app.alter}</p>
-                    <p><strong>Discord:</strong> ${app.discord}</p>
-                    <p><strong>Zeiten:</strong> ${app.onlinezeiten}</p>
-                    <p><strong>RP:</strong> ${app.rp}</p>
-                    <p><strong>Anschreiben:</strong><br><span style="white-space:pre-wrap;">${app.anschreiben}</span></p>
-                    <p><strong>Lebenslauf:</strong><br><span style="white-space:pre-wrap;">${app.lebenslauf}</span></p>
-                    <p style="font-weight:bold; margin:1.2rem 0 0.6rem;">Status: ${app.status}</p>
-                    <button class="main-btn" style="font-size:1.1rem; padding:0.8rem 1.6rem;" onclick="changeStatus(${i}, 'Angenommen')">Annehmen</button>
-                    <button class="main-btn" style="font-size:1.1rem; padding:0.8rem 1.6rem; background:linear-gradient(145deg,#dc3545,#a71d2a);" onclick="changeStatus(${i}, 'Abgelehnt')">Ablehnen</button>
-                `;
-                list.appendChild(div);
-            });
-        }
-
-        function changeStatus(index, newStatus) {
-            const apps = JSON.parse(localStorage.getItem('applications'));
-            apps[index].status = newStatus;
-            localStorage.setItem('applications', JSON.stringify(apps));
-            loadApplications();
+            const app = JSON.parse(localStorage.getItem('applications')).find(a => a.id === code);
+            document.getElementById('status-result').textContent = app 
+                ? `Status: ${app.status}`
+                : 'Kein Eintrag zu diesem Code gefunden.';
         }
 
         function updateBewerbungButton() {
