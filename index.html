@@ -17,124 +17,134 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             text-align: center;
         }
         .container {
-            max-width: 800px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7); /* Dunkler Overlay für Lesbarkeit */
-            border-radius: 10px;
+            max-width: 900px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.65);
+            border-radius: 12px;
+            margin: 20px;
         }
         h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
+            font-size: 3.2em;
+            margin-bottom: 25px;
         }
         button {
-            font-size: 1.5em;
-            padding: 15px 30px;
-            margin: 10px;
-            background-color: #007bff;
+            font-size: 1.6em;
+            padding: 18px 40px;
+            margin: 12px;
+            background-color: #0066cc;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #004080;
+            transform: translateY(-2px);
         }
         button:disabled {
-            background-color: gray;
+            background-color: #444;
             cursor: not-allowed;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
         input, textarea {
-            width: 80%;
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 1.2em;
+            width: 85%;
+            max-width: 600px;
+            margin: 12px 0;
+            padding: 14px;
+            font-size: 1.3em;
+            border-radius: 6px;
+            border: 1px solid #555;
         }
         .nav {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 20px;
+            z-index: 100;
         }
         .nav button {
-            font-size: 1em;
-            padding: 10px;
-            margin: 5px;
+            font-size: 1.1em;
+            padding: 10px 16px;
         }
-        .hidden {
-            display: none;
-        }
+        .hidden { display: none; }
         .list-item {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            text-align: left;
+        }
+        #bewerbung-code, #status-result {
+            font-size: 1.8em;
+            color: #ffff99;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
+
     <div class="nav">
         <button onclick="history.back()">← Zurück</button>
         <button onclick="history.forward()">Vorwärts →</button>
     </div>
+
     <div class="container" id="main">
         <h1>Polizei Niederrhein</h1>
         <button onclick="showBeamtenLogin()">Beamten Anmeldung</button>
         <button onclick="showKarriere()">Karriere</button>
     </div>
 
+    <!-- Beamten-Login -->
     <div class="container hidden" id="beamten-login">
         <h1>Beamten Anmeldung</h1>
-        <input type="password" id="beamten-pw" placeholder="Passwort eingeben (1224)">
+        <input type="password" id="beamten-pw" placeholder="Passwort eingeben">
         <button onclick="loginBeamten()">Anmelden</button>
-        <p id="beamten-error" style="color: red;"></p>
+        <p id="beamten-error" style="color: #ff6666; font-size: 1.2em;"></p>
         <button onclick="backToMain()">Zurück</button>
     </div>
 
+    <!-- Beamten-Panel -->
     <div class="container hidden" id="beamten-panel">
         <h1>Beamten Panel</h1>
         <div id="applications-list"></div>
-        <button onclick="showOpenClose()">Bewerbungen Öffnen/Schließen (Code 1225)</button>
+        <button onclick="showOpenClose()">Bewerbungen verwalten</button>
         <button onclick="showAktenLogin()">Aktensystem</button>
         <button onclick="logoutBeamten()">Ausloggen</button>
     </div>
 
+    <!-- Öffnen/Schließen (Code 1225 ungültig) -->
     <div class="container hidden" id="open-close">
-        <h1>Bewerbungen Öffnen/Schließen</h1>
-        <input type="password" id="open-close-code" placeholder="Code eingeben (1225 - ungültig)">
+        <h1>Bewerbungen verwalten</h1>
+        <input type="password" id="open-close-code" placeholder="Code eingeben">
         <button onclick="toggleApplications()">Ausführen</button>
-        <p id="open-close-error" style="color: red;"></p>
+        <p id="open-close-error" style="color: #ff6666; font-size: 1.3em;"></p>
         <button onclick="backToBeamten()">Zurück</button>
     </div>
 
+    <!-- Aktensystem Login -->
     <div class="container hidden" id="akten-login">
-        <h1>Aktensystem Anmeldung</h1>
-        <input type="password" id="akten-pw" placeholder="Passwort eingeben (333563)">
+        <h1>Aktensystem</h1>
+        <input type="password" id="akten-pw" placeholder="Passwort eingeben">
         <button onclick="loginAkten()">Anmelden</button>
-        <p id="akten-error" style="color: red;"></p>
+        <p id="akten-error" style="color: #ff6666; font-size: 1.2em;"></p>
         <button onclick="backToBeamten()">Zurück</button>
     </div>
 
+    <!-- Aktensystem Panel -->
     <div class="container hidden" id="akten-panel">
         <h1>Aktensystem</h1>
-        <input type="text" id="akten-name" placeholder="Aktenname">
-        <textarea id="akten-content" placeholder="Inhalt"></textarea>
+        <input type="text" id="akten-name" placeholder="Aktenname / Betreff">
+        <textarea id="akten-content" placeholder="Inhalt der Akte" rows="6"></textarea>
         <button onclick="addAkten()">Akten hinzufügen</button>
         <div id="akten-list"></div>
-        <div id="logs-list">
-            <h2>Logs</h2>
-        </div>
+        <div id="logs-list"><h2>Logs</h2></div>
         <button onclick="logoutAkten()">Zurück</button>
     </div>
 
+    <!-- Karriere -->
     <div class="container hidden" id="karriere">
         <h1>Karriere</h1>
         <button id="bewerbung-btn" onclick="showBewerbung()">Bewerbung</button>
@@ -143,105 +153,86 @@
         <button onclick="backToMain()">Zurück</button>
     </div>
 
+    <!-- Bewerbungsformular -->
     <div class="container hidden" id="bewerbung">
         <h1>Bewerbung für Polizei Niederrhein</h1>
         <form id="bewerbung-form">
             <input type="text" id="name" placeholder="Name: [Dein Vorname]" required>
             <input type="number" id="alter" placeholder="Alter: [Dein Alter]" required>
             <input type="text" id="discord" placeholder="Discord-Tag: [Name#0000]" required>
-            <input type="text" id="onlinezeiten" placeholder="Onlinezeiten: [z.B. Werktags 18–22 Uhr, Wochenende flexibel]" required>
-            <input type="text" id="rp" placeholder="RP-Erfahrung: [Kurze Info, ob du bereits auf anderen Servern Polizist warst]" required>
-            <textarea id="anschreiben" placeholder="Anschreiben: [Sehr geehrte Polizei...]" required></textarea>
-            <textarea id="lebenslauf" placeholder="Lebenslauf: [Dein Lebenslauf]" required></textarea>
+            <input type="text" id="onlinezeiten" placeholder="Onlinezeiten: [z.B. Werktags 18–22 Uhr...]" required>
+            <input type="text" id="rp" placeholder="RP-Erfahrung: [Kurze Info...]" required>
+            <textarea id="anschreiben" placeholder="Anschreiben: [Sehr geehrte Polizei...]" required rows="5"></textarea>
+            <textarea id="lebenslauf" placeholder="Lebenslauf: [Dein Lebenslauf]" required rows="6"></textarea>
             <button type="button" onclick="submitBewerbung()">Abschicken</button>
         </form>
-        <p id="bewerbung-code" style="font-size: 1.5em; color: yellow;"></p>
+        <p id="bewerbung-code"></p>
         <button onclick="backToKarriere()">Zurück</button>
     </div>
 
+    <!-- Status -->
     <div class="container hidden" id="bewerbungsstatus">
         <h1>Bewerbungsstatus</h1>
-        <p id="applications-open-status"></p>
+        <p id="applications-open-status" style="font-size: 1.5em;"></p>
         <button onclick="backToKarriere()">Zurück</button>
     </div>
 
+    <!-- Informationen / Code prüfen -->
     <div class="container hidden" id="informationen">
         <h1>Informationen</h1>
-        <input type="text" id="info-code" placeholder="Deinen Code eingeben">
+        <input type="text" id="info-code" placeholder="Deinen Bewerbungscode eingeben">
         <button onclick="checkStatus()">Status prüfen</button>
-        <p id="status-result" style="font-size: 1.5em;"></p>
+        <p id="status-result"></p>
         <button onclick="backToKarriere()">Zurück</button>
     </div>
 
     <script>
-        // Daten in localStorage initialisieren
-        if (!localStorage.getItem('applications')) {
-            localStorage.setItem('applications', JSON.stringify([]));
-        }
-        if (!localStorage.getItem('applicationsOpen')) {
-            localStorage.setItem('applicationsOpen', 'true');
-        }
-        if (!localStorage.getItem('akten')) {
-            localStorage.setItem('akten', JSON.stringify([]));
-        }
-        if (!localStorage.getItem('logs')) {
-            localStorage.setItem('logs', JSON.stringify([]));
-        }
+        // === KONFIGURATION – Hier die Codes ändern, wenn gewünscht ===
+        const BEAMTEN_PW     = '1224';
+        const OPEN_CLOSE_PW  = '1225';   // bleibt ungültig / kann später geändert werden
+        const AKTEN_PW       = '333563';
+
+        // Initialisierung localStorage
+        if (!localStorage.getItem('applications')) localStorage.setItem('applications', JSON.stringify([]));
+        if (!localStorage.getItem('applicationsOpen')) localStorage.setItem('applicationsOpen', 'true');
+        if (!localStorage.getItem('akten')) localStorage.setItem('akten', JSON.stringify([]));
+        if (!localStorage.getItem('logs')) localStorage.setItem('logs', JSON.stringify([]));
 
         function showSection(id) {
             document.querySelectorAll('.container').forEach(el => el.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
         }
 
-        function backToMain() {
-            showSection('main');
-        }
+        function backToMain() { showSection('main'); }
+        function backToKarriere() { showSection('karriere'); updateBewerbungButton(); }
+        function backToBeamten() { showSection('beamten-panel'); }
 
-        function showBeamtenLogin() {
-            showSection('beamten-login');
-        }
-
+        function showBeamtenLogin() { showSection('beamten-login'); }
         function loginBeamten() {
-            const pw = document.getElementById('beamten-pw').value;
-            if (pw === '1224') {
+            if (document.getElementById('beamten-pw').value === BEAMTEN_PW) {
                 showSection('beamten-panel');
                 loadApplications();
             } else {
                 document.getElementById('beamten-error').textContent = 'Falsches Passwort!';
             }
         }
+        function logoutBeamten() { backToMain(); }
 
-        function logoutBeamten() {
-            backToMain();
-        }
-
-        function backToBeamten() {
-            showSection('beamten-panel');
-        }
-
-        function showOpenClose() {
-            showSection('open-close');
-        }
-
+        function showOpenClose() { showSection('open-close'); }
         function toggleApplications() {
             const code = document.getElementById('open-close-code').value;
-            if (code === '1225') {
-                document.getElementById('open-close-error').textContent = 'Code ist ungültig! (Wie gewünscht)';
+            const errorEl = document.getElementById('open-close-error');
+            errorEl.textContent = '';
+            if (code === OPEN_CLOSE_PW) {
+                errorEl.textContent = 'Dieser Code ist derzeit ungültig / nicht freigeschaltet.';
             } else {
-                document.getElementById('open-close-error').textContent = 'Falscher Code!';
+                errorEl.textContent = 'Ungültiger Code.';
             }
-            // Hier könntest du den Code ändern, um es funktional zu machen: 
-            // const isOpen = localStorage.getItem('applicationsOpen') === 'true';
-            // localStorage.setItem('applicationsOpen', (!isOpen).toString());
         }
 
-        function showAktenLogin() {
-            showSection('akten-login');
-        }
-
+        function showAktenLogin() { showSection('akten-login'); }
         function loginAkten() {
-            const pw = document.getElementById('akten-pw').value;
-            if (pw === '333563') {
+            if (document.getElementById('akten-pw').value === AKTEN_PW) {
                 showSection('akten-panel');
                 loadAkten();
                 loadLogs();
@@ -249,21 +240,19 @@
                 document.getElementById('akten-error').textContent = 'Falsches Passwort!';
             }
         }
-
-        function logoutAkten() {
-            backToBeamten();
-        }
+        function logoutAkten() { backToBeamten(); }
 
         function addAkten() {
-            const name = document.getElementById('akten-name').value;
-            const content = document.getElementById('akten-content').value;
-            if (name && content) {
-                const akten = JSON.parse(localStorage.getItem('akten'));
-                akten.push({ name, content });
-                localStorage.setItem('akten', JSON.stringify(akten));
-                logAction(`Akten '${name}' hinzugefügt`);
-                loadAkten();
-            }
+            const name = document.getElementById('akten-name').value.trim();
+            const content = document.getElementById('akten-content').value.trim();
+            if (!name || !content) return;
+            const akten = JSON.parse(localStorage.getItem('akten'));
+            akten.push({ name, content });
+            localStorage.setItem('akten', JSON.stringify(akten));
+            logAction(`Akten '${name}' hinzugefügt`);
+            loadAkten();
+            document.getElementById('akten-name').value = '';
+            document.getElementById('akten-content').value = '';
         }
 
         function deleteAkten(index) {
@@ -277,54 +266,46 @@
 
         function loadAkten() {
             const list = document.getElementById('akten-list');
-            list.innerHTML = '<h2>Akten</h2>';
-            const akten = JSON.parse(localStorage.getItem('akten'));
-            akten.forEach((akt, index) => {
+            list.innerHTML = '<h2 style="margin-top:30px;">Aktuelle Akten</h2>';
+            JSON.parse(localStorage.getItem('akten')).forEach((akt, i) => {
                 const div = document.createElement('div');
-                div.classList.add('list-item');
-                div.innerHTML = `<strong>${akt.name}</strong><p>${akt.content}</p><button onclick="deleteAkten(${index})">Löschen</button>`;
+                div.className = 'list-item';
+                div.innerHTML = `<strong>${akt.name}</strong><p style="white-space:pre-wrap;">${akt.content}</p>
+                                 <button onclick="deleteAkten(${i})">Löschen</button>`;
                 list.appendChild(div);
             });
         }
 
         function logAction(action) {
             const logs = JSON.parse(localStorage.getItem('logs'));
-            const date = new Date().toLocaleString();
-            logs.push({ date, action });
+            logs.push({ date: new Date().toLocaleString('de-DE'), action });
             localStorage.setItem('logs', JSON.stringify(logs));
+            loadLogs();
         }
 
         function loadLogs() {
             const list = document.getElementById('logs-list');
             list.innerHTML = '<h2>Logs</h2>';
-            const logs = JSON.parse(localStorage.getItem('logs'));
-            logs.forEach(log => {
+            JSON.parse(localStorage.getItem('logs')).forEach(log => {
                 const p = document.createElement('p');
                 p.textContent = `${log.date}: ${log.action}`;
                 list.appendChild(p);
             });
         }
 
-        function showKarriere() {
-            showSection('karriere');
-            updateBewerbungButton();
-        }
-
-        function backToKarriere() {
-            showSection('karriere');
-        }
+        function showKarriere() { showSection('karriere'); updateBewerbungButton(); }
 
         function showBewerbung() {
             if (localStorage.getItem('applicationsOpen') === 'true') {
                 showSection('bewerbung');
             } else {
-                alert('Bewerbungen sind derzeit geschlossen!');
+                alert('Bewerbungen sind derzeit geschlossen.');
             }
         }
 
         function submitBewerbung() {
             const data = {
-                id: Math.floor(Math.random() * 1000000), // Zufälliger Code
+                id: Math.floor(100000 + Math.random() * 900000), // 6-stelliger Code
                 name: document.getElementById('name').value,
                 alter: document.getElementById('alter').value,
                 discord: document.getElementById('discord').value,
@@ -337,48 +318,50 @@
             const apps = JSON.parse(localStorage.getItem('applications'));
             apps.push(data);
             localStorage.setItem('applications', JSON.stringify(apps));
-            document.getElementById('bewerbung-code').textContent = `Dein Code: ${data.id} (Merke dir das!)`;
+
+            document.getElementById('bewerbung-code').innerHTML = 
+                `Bewerbung erfolgreich abgeschickt!<br><strong>Dein persönlicher Code: ${data.id}</strong><br>Merke ihn dir gut – du brauchst ihn später!`;
             document.getElementById('bewerbung-form').reset();
         }
 
         function showBewerbungsstatus() {
             showSection('bewerbungsstatus');
-            const status = localStorage.getItem('applicationsOpen') === 'true' ? 'Offen' : 'Geschlossen';
-            document.getElementById('applications-open-status').textContent = `Bewerbungen sind: ${status}`;
+            const isOpen = localStorage.getItem('applicationsOpen') === 'true';
+            document.getElementById('applications-open-status').textContent = 
+                `Bewerbungen sind aktuell: ${isOpen ? 'OFFEN' : 'GESCHLOSSEN'}`;
         }
 
-        function showInformationen() {
-            showSection('informationen');
-        }
+        function showInformationen() { showSection('informationen'); }
 
         function checkStatus() {
             const code = parseInt(document.getElementById('info-code').value);
-            const apps = JSON.parse(localStorage.getItem('applications'));
-            const app = apps.find(a => a.id === code);
-            if (app) {
-                document.getElementById('status-result').textContent = `Status: ${app.status}`;
-            } else {
-                document.getElementById('status-result').textContent = 'Ungültiger Code!';
+            if (!code) {
+                document.getElementById('status-result').textContent = 'Bitte einen gültigen Code eingeben.';
+                return;
             }
+            const app = JSON.parse(localStorage.getItem('applications')).find(a => a.id === code);
+            document.getElementById('status-result').textContent = app 
+                ? `Dein Status: ${app.status}`
+                : 'Kein Eintrag zu diesem Code gefunden.';
         }
 
         function loadApplications() {
             const list = document.getElementById('applications-list');
-            list.innerHTML = '<h2>Bewerbungen</h2>';
-            const apps = JSON.parse(localStorage.getItem('applications'));
-            apps.forEach((app, index) => {
+            list.innerHTML = '<h2>Eingegangene Bewerbungen</h2>';
+            JSON.parse(localStorage.getItem('applications')).forEach((app, i) => {
                 const div = document.createElement('div');
-                div.classList.add('list-item');
+                div.className = 'list-item';
                 div.innerHTML = `
-                    <p>Code: ${app.id}</p>
-                    <p>Name: ${app.name}, Alter: ${app.alter}, Discord: ${app.discord}</p>
-                    <p>Onlinezeiten: ${app.onlinezeiten}</p>
-                    <p>RP-Erfahrung: ${app.rp}</p>
-                    <p>Anschreiben: ${app.anschreiben}</p>
-                    <p>Lebenslauf: ${app.lebenslauf}</p>
-                    <p>Status: ${app.status}</p>
-                    <button onclick="changeStatus(${index}, 'Angenommen!')">Annehmen</button>
-                    <button onclick="changeStatus(${index}, 'Abgelehnt!')">Ablehnen</button>
+                    <p><strong>Code:</strong> ${app.id}</p>
+                    <p><strong>Name / Alter:</strong> ${app.name}, ${app.alter}</p>
+                    <p><strong>Discord:</strong> ${app.discord}</p>
+                    <p><strong>Zeiten:</strong> ${app.onlinezeiten}</p>
+                    <p><strong>RP-Erfahrung:</strong> ${app.rp}</p>
+                    <p><strong>Anschreiben:</strong><br>${app.anschreiben.replace(/\n/g, '<br>')}</p>
+                    <p><strong>Lebenslauf:</strong><br>${app.lebenslauf.replace(/\n/g, '<br>')}</p>
+                    <p><strong>Status:</strong> ${app.status}</p>
+                    <button onclick="changeStatus(${i}, 'Angenommen')">Annehmen</button>
+                    <button onclick="changeStatus(${i}, 'Abgelehnt')">Ablehnen</button>
                 `;
                 list.appendChild(div);
             });
@@ -392,11 +375,11 @@
         }
 
         function updateBewerbungButton() {
-            const btn = document.getElementById('bewerbung-btn');
-            btn.disabled = localStorage.getItem('applicationsOpen') !== 'true';
+            document.getElementById('bewerbung-btn').disabled = 
+                localStorage.getItem('applicationsOpen') !== 'true';
         }
 
-        // Initiale Prüfung
+        // Start
         updateBewerbungButton();
     </script>
 </body>
